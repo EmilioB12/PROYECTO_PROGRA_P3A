@@ -1,16 +1,13 @@
-import java.time.LocalDate;
-
 public class Reserva {
-    private int horasReserva;
-    private String Fecha;
+    protected int horasReserva;
+    protected String dia;
+    protected Parqueadero parqueadero;
+    protected Vehiculo vehiculo;
+    protected Persona persona;
 
-    private Parqueadero parqueadero;
-    private Vehiculo vehiculo;
-    private Persona persona;
-
-    public Reserva(int horasReserva, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona) {
+    public Reserva(int horasReserva, String dia, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona) {
         this.horasReserva = horasReserva;
-        this.Fecha = LocalDate.now().toString();
+        this.dia = dia;
         this.parqueadero = parqueadero;
         this.vehiculo = vehiculo;
         this.persona = persona;
@@ -24,12 +21,12 @@ public class Reserva {
         this.horasReserva = horasReserva;
     }
 
-    public String getFecha() {
-        return Fecha;
+    public String getDia() {
+        return dia;
     }
 
-    public void setFecha(String fecha) {
-        Fecha = fecha;
+    public void setDia(String dia) {
+        this.dia = dia;
     }
 
     public Parqueadero getParqueadero() {
@@ -56,17 +53,21 @@ public class Reserva {
         this.persona = persona;
     }
 
-    @Override
-    public String toString() {
-        return  "\nHoras de Reserva: " + horasReserva +
-                "\nFecha: " + Fecha +
-                "\nNombre del Parqueadero: " + parqueadero.getLugar() +
-                "\nNivel del Parqueadero: " + parqueadero.getEspacio().getNivel() +
-                "\nNumeracion del Parqueadero: " + parqueadero.getEspacio().getNumeracion() +
-                "\nPlaca del Vehiculo: " + vehiculo.getPlaca() +
-                "\nTipo de Vehiculo: " + vehiculo.getTipoVehiculo() +
-                "\nNombre de la persona: " + persona.getNombre() +
-                "\nID de la persona: " + persona.getId() +
-                "\nTipo de la persona: " + persona.getTipoPersona();
+    public boolean asignarEspacio() {
+        parqueadero.imprimirEspacios();
+        int[][] matrizEspacios = parqueadero.calcularEspacios();
+        boolean[][] disponibilidad = parqueadero.getDisponibilidad();
+
+        for (int i = 0; i < matrizEspacios.length; i++) {
+            for (int j = 0; j < matrizEspacios[i].length; j++) {
+                if (disponibilidad[i][j]) {
+                    disponibilidad[i][j] = false;
+                    System.out.println("Reserva asignada en el espacio: Nivel " + (i + 1) + " Espacio " + (j + 1));
+                    return true;
+                }
+            }
+        }
+        System.out.println("No hay espacios disponibles.");
+        return false;
     }
 }

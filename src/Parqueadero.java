@@ -1,22 +1,24 @@
+import java.util.Arrays;
+
 public class Parqueadero {
     private String lugar;
     private int cantidadEspacio;
     private Espacio espacio;
-    public Parqueadero(String simonBolivar, int cantidadEspacio, boolean add){
-
-    }
+    private int[][] matrizEspacios;
+    private boolean[][] disponibilidad;
 
     public Parqueadero(String lugar, int cantidadEspacio, Espacio espacio) {
         this.lugar = lugar;
         this.cantidadEspacio = cantidadEspacio;
         this.espacio = espacio;
-    }
-    public Parqueadero(String lugar, int cantidadEspacio) {
-        this.lugar = lugar;
-        this.cantidadEspacio = cantidadEspacio;
-        this.espacio = espacio;
+        this.matrizEspacios = calcularEspacios();
+        this.disponibilidad = new boolean[espacio.getNivel()][cantidadEspacio];
+        for (boolean[] fila : disponibilidad) {
+            Arrays.fill(fila, true); // Todos los espacios están disponibles inicialmente
+        }
     }
 
+    // Getters y Setters
     public String getLugar() {
         return lugar;
     }
@@ -41,13 +43,22 @@ public class Parqueadero {
         this.espacio = espacio;
     }
 
-    @Override
-    public String toString() {
-        return  "\nNombre Parqueadero: " + lugar +
-                "\nEspacio de parqueadero: " + cantidadEspacio+
-                "\nNiveles: "+getEspacio().getNivel()+
-                "\nNumero total de espacios: " + (cantidadEspacio * espacio.getNivel());
+    public int[][] getMatrizEspacios() {
+        return matrizEspacios;
     }
+
+    public void setMatrizEspacios(int[][] matrizEspacios) {
+        this.matrizEspacios = matrizEspacios;
+    }
+
+    public boolean[][] getDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setDisponibilidad(boolean[][] disponibilidad) {
+        this.disponibilidad = disponibilidad;
+    }
+
     public int[][] calcularEspacios() {
         int niveles = espacio.getNivel();
         int espaciosPorNivel = cantidadEspacio;
@@ -63,7 +74,6 @@ public class Parqueadero {
     }
 
     public void imprimirEspacios() {
-        int[][] matrizEspacios = calcularEspacios();
         for (int[] nivel : matrizEspacios) {
             for (int espacio : nivel) {
                 System.out.print(espacio + " ");
@@ -71,7 +81,5 @@ public class Parqueadero {
             System.out.println();
         }
     }
+
 }
-
-
-

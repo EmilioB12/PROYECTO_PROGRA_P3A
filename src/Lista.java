@@ -87,4 +87,11 @@ public class Lista {
         String regex = "^[A-Za-z]{3}\\d{4}$";
         return  placa.matches(regex);
     }
+
+    public Persona buscarPersonaNombre(String nombre) {
+        for (Persona p : personas)
+            if (p.getNombre().equals(nombre))
+                return p;
+        return null;
+    }
 }

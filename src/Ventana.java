@@ -34,9 +34,20 @@ public class Ventana {
     private JPanel pestanaUsuarios;
     private JPanel pestanaVehiculos;
     private JPanel pestanaParqueadero;
+    private JPanel pestanaReserva;
+    private JComboBox comboDia;
+    private JSpinner spinnerHoras;
+    private JComboBox comboParqueaderoDisp;
+    private JTextField textPlacaReserva;
+    private JTextField textPersonaReserva;
+    private JButton reservarButton;
+    private JButton modificarReservaButton;
+    private JButton eliminarReservaButton;
+    private JButton buscarReservaButton;
 
     private Lista personas = new Lista();
     private ListaParqueadero parqueaderos = new ListaParqueadero();
+    private ListaReserva reserva = new ListaReserva();
 
     // Definir credenciales de administrador
     private final String adminUsername = "admin";
@@ -322,11 +333,76 @@ public class Ventana {
                 }
             }
         });
-
-        // Deshabilitar pestañas al inicio
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaUsuarios), false);
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaParqueadero), false);
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaVehiculos), false);
+        reservarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Obtener los datos de los campos de texto y combobox
+                    String dia = comboDia.getSelectedItem().toString();
+                    int horasReserva = (Integer) spinnerHoras.getValue();
+                    String nombreParqueadero = comboParqueaderoDisp.getSelectedItem().toString();
+                    String placaVehiculo = textPlacaReserva.getText();
+                    String nombrePersona = textPersonaReserva.getText();
+
+                    // Validar campos
+                    if (dia.isEmpty() || nombreParqueadero.isEmpty() || placaVehiculo.isEmpty() || nombrePersona.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Todos los campos deben ser llenados", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Buscar el parqueadero
+                    Parqueadero parqueadero = parqueaderos.buscarParqeuadero(nombreParqueadero);
+                    if (parqueadero == null) {
+                        JOptionPane.showMessageDialog(null, "Parqueadero no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Buscar el vehículo
+                    Vehiculo vehiculo = null;
+                    for (Persona p : personas.getPersonas()) {
+                        for (Vehiculo v : p.getVehiculos()) {
+                            if (v.getPlaca().equals(placaVehiculo)) {
+                                vehiculo = v;
+                                break;
+                            }
+                        }
+                        if (vehiculo != null) break;
+                    }
+
+                    if (vehiculo == null) {
+                        JOptionPane.showMessageDialog(null, "Vehículo no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Buscar la persona
+                    Persona persona = personas.buscarPersonaNombre(nombrePersona);
+                    if (persona == null) {
+                        JOptionPane.showMessageDialog(null, "Persona no encontrada", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Crear una nueva reserva
+                    Reserva reserva = new Reserva(horasReserva, dia, parqueadero, vehiculo, persona);
+
+                    // Agregar la reserva a la lista de reservas
+
+                    // Mostrar mensaje de éxito
+                    JOptionPane.showMessageDialog(null, "Reserva creada con éxito\n" +
+                            "Día: " + dia +
+                            "\nHoras: " + horasReserva +
+                            "\nParqueadero: " + nombreParqueadero +
+                            "\nVehículo: " + placaVehiculo +
+                            "\nPersona: " + nombrePersona);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error al crear la reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
     }
 
     public void limpiarDatos() {

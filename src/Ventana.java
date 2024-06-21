@@ -336,6 +336,7 @@ public class Ventana {
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaUsuarios), false);
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaParqueadero), false);
         tabbedPane1.setEnabledAt(tabbedPane1.indexOfComponent(pestanaVehiculos), false);
+        //hola
         reservarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

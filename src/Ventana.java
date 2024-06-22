@@ -395,7 +395,7 @@ public class Ventana {
 
                     // Actualizar disponibilidad de espacios en el parqueadero
 
-
+//
                     // Mostrar mensaje de éxito
                     JOptionPane.showMessageDialog(null, "Reserva creada con éxito\n" +
                             "Día: " + dia +

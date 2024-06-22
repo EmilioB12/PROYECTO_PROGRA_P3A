@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.DefaultComboBoxModel;
 
 public class Ventana {
     private JTabbedPane tabbedPane1;
@@ -35,9 +36,9 @@ public class Ventana {
     private JPanel pestanaVehiculos;
     private JPanel pestanaParqueadero;
     private JPanel pestanaReserva;
-    private JComboBox comboDia;
-    private JSpinner spinnerHoras;
-    private JComboBox comboParqueaderoDisp;
+    private JComboBox comboDiaReserva;
+    private JSpinner spinnerHorasReserva;
+    private JComboBox comboParqueaderoReserva;
     private JTextField textPlacaReserva;
     private JTextField textPersonaReserva;
     private JButton reservarButton;
@@ -163,7 +164,6 @@ public class Ventana {
             public void actionPerformed(ActionEvent e) {
                 if (validarStringLetras(textField1nompreParqueadero.getText().trim())) {
                     try {
-                        // Crear un nuevo objeto Parqueadero con los datos ingresados
                         Parqueadero parqueadero = new Parqueadero(textField1nompreParqueadero.getText(),
                                 Integer.parseInt(textField1espacioParqueadero.getText()),
                                 new Espacio(Integer.parseInt(spinner1Nivel.getValue().toString())));
@@ -174,7 +174,6 @@ public class Ventana {
                                 "\nEspacio por nivel del parqueadero: " + Integer.parseInt(textField1espacioParqueadero.getText()) +
                                 "\nNiveles del parqueadero: " + Integer.parseInt(spinner1Nivel.getValue().toString()));
 
-                        // Imprimir la numeración de los espacios
                         parqueadero.imprimirEspacios();
 
                         limpiarDatosParqueadero();
@@ -182,6 +181,7 @@ public class Ventana {
                         JOptionPane.showMessageDialog(null, "Error al agregar parqueadero. Solo se permiten números en el campo de espacio");
                     }
                     llenarJlistParqueaderos();
+                    llenarComboParqueaderoReserva(); // Llenar el combo box después de agregar
                     System.out.println(parqueaderos.listarParqueadero());
                 } else {
                     JOptionPane.showMessageDialog(null, "Ingresar solo letras para el nombre del parqueadero");
@@ -213,6 +213,7 @@ public class Ventana {
                     JOptionPane.showMessageDialog(null, "Error al modificar el campo " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 llenarJlistParqueaderos();
+                llenarComboParqueaderoReserva(); // Llenar el combo box después de editar
             }
         });
         buscarParqueaderoButton.addActionListener(new ActionListener() {
@@ -241,6 +242,7 @@ public class Ventana {
                     JOptionPane.showMessageDialog(null, "Error al eliminar parqueadero: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
                 llenarJlistParqueaderos();
+                llenarComboParqueaderoReserva(); // Llenar el combo box después de eliminar
             }
         });
         agregarVehiculosButton.addActionListener(new ActionListener() {
@@ -342,9 +344,9 @@ public class Ventana {
             public void actionPerformed(ActionEvent e) {
                 try {
                     // Obtener los datos de los campos de texto y combobox
-                    String dia = comboDia.getSelectedItem().toString();
-                    int horasReserva = (Integer) spinnerHoras.getValue();
-                    String nombreParqueadero = comboParqueaderoDisp.getSelectedItem().toString();
+                    String dia = comboDiaReserva.getSelectedItem().toString();
+                    int horasReserva = (Integer) spinnerHorasReserva.getValue();
+                    String nombreParqueadero = comboParqueaderoReserva.getSelectedItem().toString();
                     String placaVehiculo = textPlacaReserva.getText();
                     String nombrePersona = textPersonaReserva.getText();
 
@@ -365,7 +367,7 @@ public class Ventana {
                     Vehiculo vehiculo = null;
                     for (Persona p : personas.getPersonas()) {
                         for (Vehiculo v : p.getVehiculos()) {
-                            if (v.getPlaca().equals(placaVehiculo)) {
+                            if (v.getPlaca().equalsIgnoreCase(placaVehiculo)) {
                                 vehiculo = v;
                                 break;
                             }
@@ -386,9 +388,13 @@ public class Ventana {
                     }
 
                     // Crear una nueva reserva
-                    Reserva reserva = new Reserva(horasReserva, dia, parqueadero, vehiculo, persona);
+
 
                     // Agregar la reserva a la lista de reservas
+                    reserva.agregarReserva(new Reserva(horasReserva, dia, parqueadero, vehiculo, persona));
+
+                    // Actualizar disponibilidad de espacios en el parqueadero
+
 
                     // Mostrar mensaje de éxito
                     JOptionPane.showMessageDialog(null, "Reserva creada con éxito\n" +
@@ -397,6 +403,7 @@ public class Ventana {
                             "\nParqueadero: " + nombreParqueadero +
                             "\nVehículo: " + placaVehiculo +
                             "\nPersona: " + nombrePersona);
+
 
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Error al crear la reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -436,16 +443,28 @@ public class Ventana {
     }
 
     public void llenarJlistParqueaderos() {
-        DefaultListModel dl = new DefaultListModel<>();
-        for (Parqueadero pa : parqueaderos.getParqueaderos()) {
-            dl.addElement(pa);
+        DefaultListModel<Parqueadero> dl = new DefaultListModel<>();
+        for (Parqueadero parqueadero : parqueaderos.getParqueaderos()) {
+            dl.addElement(parqueadero);
         }
         list2.setModel(dl);
     }
 
+
+    public void llenarComboParqueaderoReserva() {
+        comboParqueaderoReserva.removeAllItems();  // Limpiar el combobox
+        for (Parqueadero parqueadero : parqueaderos.getParqueaderos()) {
+            comboParqueaderoReserva.addItem(parqueadero.getLugar());
+        }
+    }
     public static boolean validarStringLetras(String dato) {
         return dato.matches("[a-zA-Z ]*");
     }
+
+
+
+
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Ventana");

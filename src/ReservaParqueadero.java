@@ -23,4 +23,6 @@ public class ReservaParqueadero extends Reserva {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
+
 }

@@ -2,14 +2,13 @@ public class Espacio {
     private int nivel;
     private String numeracion;
 
-    public Espacio(){
+    public Espacio() {
 
     }
 
     public Espacio(int nivel, String numeracion) {
         this.nivel = nivel;
         this.numeracion = numeracion;
-
     }
 
     public Espacio(int nivel) {

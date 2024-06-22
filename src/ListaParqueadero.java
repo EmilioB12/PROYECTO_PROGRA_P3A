@@ -59,4 +59,14 @@ public class ListaParqueadero {
         }
     }
 
+    /*public void actualizarDisponibilidad(String nombreParqueadero, boolean ocupado) throws Exception {
+        Parqueadero parqueadero = buscarParqeuadero(nombreParqueadero);
+        if (parqueadero != null) {
+            parqueadero.actualizarEspacios(ocupado);
+        } else {
+            throw new Exception("Parqueadero no encontrado");
+        }
+    }*/
+
+
 }

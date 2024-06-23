@@ -7,8 +7,9 @@ public class Parqueadero {
     private String lugar;
     private int cantidadEspacio;
     private Espacio espacio;
-    private int[][] matrizEspacios;
+    private Espacio[][] matrizEspacios;
     private boolean[][] disponibilidad;
+
 
     public Parqueadero(String lugar, int cantidadEspacio, Espacio espacio) {
         this.lugar = lugar;
@@ -46,11 +47,11 @@ public class Parqueadero {
         this.espacio = espacio;
     }
 
-    public int[][] getMatrizEspacios() {
+    public Espacio[][] getMatrizEspacios() {
         return matrizEspacios;
     }
 
-    public void setMatrizEspacios(int[][] matrizEspacios) {
+    public void setMatrizEspacios(Espacio[][] matrizEspacios) {
         this.matrizEspacios = matrizEspacios;
     }
 
@@ -62,36 +63,38 @@ public class Parqueadero {
         this.disponibilidad = disponibilidad;
     }
 
-    public int[][] calcularEspacios() {
+    public Espacio[][] calcularEspacios() {
         int niveles = espacio.getNivel();
         int espaciosPorNivel = cantidadEspacio;
-        int[][] matrizEspacios = new int[niveles][espaciosPorNivel];
+        Espacio[][] matrizEspacios = new Espacio[niveles][espaciosPorNivel];
 
         int numeracion = 1;
         for (int i = 0; i < niveles; i++) {
             for (int j = 0; j < espaciosPorNivel; j++) {
-                matrizEspacios[i][j] = numeracion++;
+                matrizEspacios[i][j] = new Espacio(i + 1, numeracion++);
             }
         }
         return matrizEspacios;
     }
 
     public void imprimirEspacios() {
-        for (int[] nivel : matrizEspacios) {
-            for (int espacio : nivel) {
-                System.out.print(espacio + " ");
+        for (Espacio[] nivel : matrizEspacios) {
+            for (Espacio espacio : nivel) {
+                System.out.print(espacio.getNumeracion() + " ");
             }
             System.out.println();
         }
     }
+
     // Método para asignar un espacio disponible y marcarlo como ocupado
+
     public int asignarEspacioDisponible() {
         // Crear una lista de espacios disponibles
-        List<Integer> espaciosDisponibles = new ArrayList<>();
+        List<Espacio> espaciosDisponibles = new ArrayList<>();
 
         // Agregar todos los espacios disponibles a la lista
-        for (int i = 0; i < espacio.getNivel(); i++) {
-            for (int j = 0; j < cantidadEspacio; j++) {
+        for (int i = 0; i < matrizEspacios.length; i++) {
+            for (int j = 0; j < matrizEspacios[i].length; j++) {
                 if (disponibilidad[i][j]) {
                     espaciosDisponibles.add(matrizEspacios[i][j]);
                 }
@@ -107,27 +110,26 @@ public class Parqueadero {
         // Elegir un espacio aleatorio de los disponibles
         Random random = new Random();
         int indiceEspacio = random.nextInt(espaciosDisponibles.size());
-        int espacioElegido = espaciosDisponibles.get(indiceEspacio);
+        Espacio espacioElegido = espaciosDisponibles.get(indiceEspacio);
 
         // Marcar el espacio elegido como ocupado
         marcarEspacioOcupado(espacioElegido);
 
-        return espacioElegido;
+        return espacioElegido.getNumeracion();
     }
 
+
     // Método privado para marcar un espacio como ocupado
-    private void marcarEspacioOcupado(int espacioOcupado) {
+    private void marcarEspacioOcupado(Espacio espacioOcupado) {
         for (int i = 0; i < espacio.getNivel(); i++) {
             for (int j = 0; j < cantidadEspacio; j++) {
-                if (matrizEspacios[i][j] == espacioOcupado) {
+                if (matrizEspacios[i][j].getNumeracion() == espacioOcupado.getNumeracion()) {
                     disponibilidad[i][j] = false; // Marcar como no disponible
                     return;
                 }
             }
         }
     }
-
-
 
     @Override
     public String toString() {

@@ -1,13 +1,24 @@
 public class Reserva {
     protected int horasReserva;
-    protected String dia;
+
+    protected int dia;
+    protected int mes;
+    protected int anio;
     protected Parqueadero parqueadero;
     protected Vehiculo vehiculo;
     protected Persona persona;
 
-    public Reserva(int horasReserva, String dia, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona) {
+    public Reserva(int dia, int mes, int anio) {
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+    }
+
+    public Reserva(int horasReserva, int dia, int mes, int anio, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona) {
         this.horasReserva = horasReserva;
         this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
         this.parqueadero = parqueadero;
         this.vehiculo = vehiculo;
         this.persona = persona;
@@ -21,12 +32,28 @@ public class Reserva {
         this.horasReserva = horasReserva;
     }
 
-    public String getDia() {
+    public int getDia() {
         return dia;
     }
 
-    public void setDia(String dia) {
+    public void setDia(int dia) {
         this.dia = dia;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAnio() {
+        return anio;
+    }
+
+    public void setAnio(int anio) {
+        this.anio = anio;
     }
 
     public Parqueadero getParqueadero() {
@@ -51,23 +78,5 @@ public class Reserva {
 
     public void setPersona(Persona persona) {
         this.persona = persona;
-    }
-
-    public boolean asignarEspacio() {
-        parqueadero.imprimirEspacios();
-        int[][] matrizEspacios = parqueadero.calcularEspacios();
-        boolean[][] disponibilidad = parqueadero.getDisponibilidad();
-
-        for (int i = 0; i < matrizEspacios.length; i++) {
-            for (int j = 0; j < matrizEspacios[i].length; j++) {
-                if (disponibilidad[i][j]) {
-                    disponibilidad[i][j] = false;
-                    System.out.println("Reserva asignada en el espacio: Nivel " + (i + 1) + " Espacio " + (j + 1));
-                    return true;
-                }
-            }
-        }
-        System.out.println("No hay espacios disponibles.");
-        return false;
     }
 }

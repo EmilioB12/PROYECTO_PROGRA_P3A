@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,13 @@ public class Persona {
     private String id;
     private String tipoPersona;
     private List<Vehiculo> vehiculos;
+
+    public Persona(String nombre, String id, String tipoPersona, List<Vehiculo> vehiculos) {
+        this.nombre = nombre;
+        this.id = id;
+        this.tipoPersona = tipoPersona;
+        this.vehiculos = vehiculos;
+    }
 
     public Persona(String nombre, String id, String tipoPersona) {
         this.nombre = nombre;
@@ -57,6 +65,12 @@ public class Persona {
         }
     }
 
+    public void actualizarComboBox(JComboBox<String> comboBox) {
+        comboBox.removeAllItems(); // Limpiar el ComboBox
+        for (Vehiculo vehiculo : vehiculos) {
+            comboBox.addItem(vehiculo.getPlaca()); // Agregar cada placa al ComboBox
+        }
+    }
 
     @Override
     public String toString() {

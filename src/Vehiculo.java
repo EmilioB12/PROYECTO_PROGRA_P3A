@@ -10,6 +10,10 @@ public class Vehiculo {
         this.tipoVehiculo = tipoVehiculo;
     }
 
+    public Vehiculo(String placa) {
+        this.placa = placa;
+    }
+
     public String getTipoVehiculo() {
         return tipoVehiculo;
     }

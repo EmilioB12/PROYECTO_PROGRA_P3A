@@ -1,13 +1,19 @@
 public class ReservaParqueadero extends Reserva {
     private int tiempoReserva;
     private double precio;
-    private int espacioAsignado; // Agregamos un campo para almacenar el espacio asignado
+    private Espacio espacioAsignado; // Agregamos un campo para almacenar el espacio asignado
 
-    public ReservaParqueadero(int horasReserva, int dia, int mes, int anio, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona, int tiempoReserva, double precio) {
-        super(horasReserva, dia, mes, anio, parqueadero, vehiculo, persona);
-        this.tiempoReserva = tiempoReserva;
+    public ReservaParqueadero(int tiempoReserva, int horaDeReserva, int dia, int mes, int anio, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona, int tiempoReserva1, double precio, Espacio espacioAsignado) {
+        super(tiempoReserva, horaDeReserva, dia, mes, anio, parqueadero, vehiculo, persona);
+        this.tiempoReserva = tiempoReserva1;
         this.precio = precio;
-        this.espacioAsignado = parqueadero.asignarEspacioDisponible(); // Asignar espacio disponible al crear la reserva
+        this.espacioAsignado = espacioAsignado;
+    }
+
+    public ReservaParqueadero(int tiempoReserva, int horaDeReserva, int dia, int mes, int anio, Parqueadero parqueadero, Vehiculo vehiculo, Persona persona, int tiempoReserva1, double precio) {
+        super(tiempoReserva, horaDeReserva, dia, mes, anio, parqueadero, vehiculo, persona);
+        this.tiempoReserva = tiempoReserva1;
+        this.precio = precio;
     }
 
     public int getTiempoReserva() {

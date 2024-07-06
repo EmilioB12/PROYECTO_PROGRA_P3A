@@ -9,6 +9,7 @@ public class Parqueadero {
     private Espacio espacio;
     private Espacio[][] matrizEspacios;
     private boolean[][] disponibilidad;
+    private List<Bitacora> matricesBitacora;
 
 
     public Parqueadero(String lugar, int cantidadEspacio, Espacio espacio) {
@@ -63,6 +64,14 @@ public class Parqueadero {
         this.disponibilidad = disponibilidad;
     }
 
+    public List<Bitacora> getMatricesBitacora() {
+        return matricesBitacora;
+    }
+
+    public void setMatricesBitacora(List<Bitacora> matricesBitacora) {
+        this.matricesBitacora = matricesBitacora;
+    }
+
     public Espacio[][] calcularEspacios() {
         int niveles = espacio.getNivel();
         int espaciosPorNivel = cantidadEspacio;
@@ -88,7 +97,7 @@ public class Parqueadero {
 
     // Método para asignar un espacio disponible y marcarlo como ocupado
 
-    public int asignarEspacioDisponible() {
+    /*public int asignarEspacioDisponible() {
         // Crear una lista de espacios disponibles
         List<Espacio> espaciosDisponibles = new ArrayList<>();
 
@@ -116,6 +125,19 @@ public class Parqueadero {
         marcarEspacioOcupado(espacioElegido);
 
         return espacioElegido.getNumeracion();
+    }*/
+
+    public Espacio asignarEspacioDisponible() {
+        for (int i = 0; i < matrizEspacios.length; i++) {
+            for (int j = 0; j < matrizEspacios[i].length; j++) {
+                if (disponibilidad[i][j]) {
+                    Espacio espacioAsignado = matrizEspacios[i][j];
+                    disponibilidad[i][j] = false;
+                    return espacioAsignado;
+                }
+            }
+        }
+        return null; // No hay espacios disponibles
     }
 
 
